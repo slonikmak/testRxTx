@@ -17,7 +17,7 @@ public class Arduino implements SerialPortEventListener {
     private static final String PORT_NAMES[] = {
             "/dev/tty.usbserial-A9007UX1", // Mac OS X
             "/dev/ttyUSB0", // Linux
-            "COM4", // Windows
+            "COM5", // Windows
     };
 
     /**
@@ -102,7 +102,7 @@ public class Arduino implements SerialPortEventListener {
         if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             try {
                 //int myByte=input.read();
-                System.out.println(reader.readLine());
+                System.out.println(input.read());
                 /*int value = myByte & 0xff;//byte to int conversion:0...127,-127...0 -> 0...255
                 if(value>=0 && value<256){//make shure everything is ok
                     System.out.println((char)myByte);
@@ -114,10 +114,27 @@ public class Arduino implements SerialPortEventListener {
         }
     }
 
-    public synchronized void writeData(String data) {
+    public synchronized void writeData(int data) {
         System.out.println("Sent: " + data);
         try {
-            output.write(data.getBytes());
+            output.write(data);
+        } catch (Exception e) {
+            System.out.println("could not write to port");
+        }
+    }
+    public synchronized void writeData(byte data) {
+        System.out.println("Sent: " + data);
+        try {
+            output.write(data);
+        } catch (Exception e) {
+            System.out.println("could not write to port");
+        }
+    }
+
+    public synchronized void writeData(byte[] data) {
+        System.out.println("Sent: " + data);
+        try {
+            output.write(data);
         } catch (Exception e) {
             System.out.println("could not write to port");
         }
@@ -133,18 +150,16 @@ public class Arduino implements SerialPortEventListener {
 
         arduino.initialize();
 
-        new Thread(new Runnable() {
-            public void run() {
-                while (true){
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    arduino.writeData("100");
-                }
-            }
-        }).start();
+        Thread.sleep(3000);
+        arduino.writeData("020".getBytes());
+        Thread.sleep(500);
+        arduino.writeData("040".getBytes());
+        Thread.sleep(500);
+        arduino.writeData("060".getBytes());
+        Thread.sleep(500);
+        arduino.writeData("080".getBytes());
+        Thread.sleep(500);
+        arduino.writeData("100".getBytes());
 
     }
 }

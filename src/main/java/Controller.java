@@ -8,55 +8,186 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- Servo myservo;
- // the setup function runs once when you press reset or power the board
- void setup() {
- // initialize digital pin LED_BUILTIN as an output.
- pinMode(LED_BUILTIN, OUTPUT);
- myservo.attach(2);
- Serial.begin(9600);
- }
+ #include <Wire.h>
 
- // the loop function runs over and over again forever
- void loop() {
- String s;
+ #include <Multiservo.h>
+
+ #include <Servo.h>
+
+ /* Simple Serial ECHO script : Written by ScottC 03/07/2012 */
+
+/* Use a variable called byteRead to temporarily store
+   the data coming from the computer */
+/*byte byteRead;
+        int num,b1,b2,b3,res;
+        Servo servo;
+        Multiservo servo6;
+        Multiservo servo9;
+        Multiservo servo10;
+        Multiservo servo11;
+
+        void setup() {
+// Turn the Serial Protocol ON
+        Serial.begin(9600);
+        servo6.attach(6);
+        servo10.attach(10);
+        servo11.attach(11);
+        servo9.attach(9);
+        }
+
+        void loop() {
+        //delay(1000);
+        //Serial.print("aaa");
+   *//*  check if data has been sent from the computer: *//*
+        if (Serial.available()>0) {
+        num = (Serial.read()-'0');
+        while (Serial.available() <= 0);
+        b1 = (Serial.read()-'0');
+        while (Serial.available() <= 0);
+        b2 = (Serial.read()-'0');
+        while (Serial.available() <= 0);
+        b3 = (Serial.read()-'0');
+        res = b1*100+b2*10+b3;
+        //Serial.println(res);
+        switch (num) {
+        case 6:
+        servo6.write(res);
+        break;
+        case 9:
+        servo9.write(res);
+        break;
+        case 0:
+        servo10.write(res);
+        break;
+        case 1:
+        servo11.write(res);
+        break;
+        }
 
 
- //myservo.write(90);
- //Serial.println("Succesfully received.");
- //digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
- //myservo.write(100);
- //digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
- //delay(1000);                       // wait for a second
- }
- void serialEvent(){
- //Serial.println("ok");
- String s;
- s = Serial.readString();
- int i = s.toInt();
- Serial.println(i);
- myservo.write(i);
- }
+        }
+        }*/
 
- */
 public class Controller implements Initializable{
     Arduino arduino;
 
     @FXML
-    private Slider slider;
+    private Slider slider6;
 
     @FXML
-    private Label lable;
+    private Label lable6;
+
+    @FXML
+    private Slider slider11;
+
+    @FXML
+    private Slider slider10;
+
+    @FXML
+    private Slider slider9;
+
+    @FXML
+    private Label lablel11;
+
+    @FXML
+    private Label lablel10;
+
+    @FXML
+    private Label lablel9;
+
+    @FXML
+    private Slider testSlider;
+
+    @FXML
+    private Label testLabel;
 
     public void initialize(URL location, ResourceBundle resources) {
         arduino = new Arduino();
         arduino.initialize();
 
-        lable.textProperty().bindBidirectional(slider.valueProperty(), new StringConverter<Number>() {
+        lable6.textProperty().bindBidirectional(slider6.valueProperty(), new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
                 int val = (int) Math.round((Double) object);
-                arduino.writeData(String.valueOf(val));
+                String string;
+                if (val<100) string = "0"+val;
+                else string = String.valueOf(val);
+                arduino.writeData("6".getBytes());
+                arduino.writeData(string.getBytes());
+                return String.valueOf(val);
+            }
+
+            @Override
+            public Number fromString(String string) {
+                return null;
+            }
+        });
+
+        lablel11.textProperty().bindBidirectional(slider11.valueProperty(), new StringConverter<Number>() {
+            @Override
+            public String toString(Number object) {
+                int val = (int) Math.round((Double) object);
+                String string;
+                if (val<100) string = "0"+val;
+                else string = String.valueOf(val);
+                arduino.writeData("1".getBytes());
+                arduino.writeData(string.getBytes());
+                return String.valueOf(val);
+            }
+
+            @Override
+            public Number fromString(String string) {
+                return null;
+            }
+        });
+
+        lablel10.textProperty().bindBidirectional(slider10.valueProperty(), new StringConverter<Number>() {
+            @Override
+            public String toString(Number object) {
+                int val = (int) Math.round((Double) object);
+                String string;
+                if (val<100) string = "0"+val;
+                else if(val<10) string = "00"+val;
+                else string = String.valueOf(val);
+                arduino.writeData("0".getBytes());
+                arduino.writeData(string.getBytes());
+                return String.valueOf(val);
+            }
+
+            @Override
+            public Number fromString(String string) {
+                return null;
+            }
+        });
+
+        lablel9.textProperty().bindBidirectional(slider9.valueProperty(), new StringConverter<Number>() {
+            @Override
+            public String toString(Number object) {
+                int val = (int) Math.round((Double) object);
+                String string;
+                if (val<100) string = "0"+val;
+                else string = String.valueOf(val);
+                arduino.writeData("9".getBytes());
+                arduino.writeData(string.getBytes());
+                return String.valueOf(val);
+            }
+
+            @Override
+            public Number fromString(String string) {
+                return null;
+            }
+        });
+
+        testLabel.textProperty().bindBidirectional(testSlider.valueProperty(), new StringConverter<Number>() {
+            @Override
+            public String toString(Number object) {
+                int val = (int) Math.round((Double) object);
+                String string;
+                if (val<100) string = "0"+val;
+                //else if(val<10) string = "00"+val;
+                else string = String.valueOf(val);
+                arduino.writeData("9".getBytes());
+                arduino.writeData(string.getBytes());
                 return String.valueOf(val);
             }
 
