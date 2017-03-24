@@ -2,23 +2,23 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-/**
- #include <Wire.h>
+/*#include <Wire.h>
 
- #include <Multiservo.h>
+        #include <Multiservo.h>
 
- #include <Servo.h>
+        #include <Servo.h>
 
- /* Simple Serial ECHO script : Written by ScottC 03/07/2012 */
+*//* Simple Serial ECHO script : Written by ScottC 03/07/2012 *//*
 
-/* Use a variable called byteRead to temporarily store
-   the data coming from the computer */
-/*byte byteRead;
+*//* Use a variable called byteRead to temporarily store
+   the data coming from the computer *//*
+        byte byteRead;
         int num,b1,b2,b3,res;
         Servo servo;
         Multiservo servo6;
@@ -36,11 +36,13 @@ import java.util.ResourceBundle;
         }
 
         void loop() {
-        //delay(1000);
+        //delay(100);
         //Serial.print("aaa");
    *//*  check if data has been sent from the computer: *//*
         if (Serial.available()>0) {
-        num = (Serial.read()-'0');
+        int a = Serial.read();
+        if (a==97){
+        while(Serial.available()<0);
         while (Serial.available() <= 0);
         b1 = (Serial.read()-'0');
         while (Serial.available() <= 0);
@@ -48,28 +50,59 @@ import java.util.ResourceBundle;
         while (Serial.available() <= 0);
         b3 = (Serial.read()-'0');
         res = b1*100+b2*10+b3;
-        //Serial.println(res);
-        switch (num) {
-        case 6:
+        Serial.println(res);
+        //Serial.print("e");
         servo6.write(res);
-        break;
-        case 9:
+        //Serial.print("s");
+        while (Serial.available() <= 0);
+        b1 = (Serial.read()-'0');
+        while (Serial.available() <= 0);
+        b2 = (Serial.read()-'0');
+        while (Serial.available() <= 0);
+        b3 = (Serial.read()-'0');
+        res = b1*100+b2*10+b3;
         servo9.write(res);
-        break;
-        case 0:
+        Serial.println(res);
+        //Serial.print("e");
+        //Serial.print("s");
+        while (Serial.available() <= 0);
+        b1 = (Serial.read()-'0');
+        while (Serial.available() <= 0);
+        b2 = (Serial.read()-'0');
+        while (Serial.available() <= 0);
+        b3 = (Serial.read()-'0');
+        res = b1*100+b2*10+b3;
         servo10.write(res);
-        break;
-        case 1:
-        servo11.write(res);
-        break;
-        }
+        Serial.println(res);
 
+        } else return;
+        //num = (Serial.read()-'0');
+        //Serial.println("s");
+
+        //Serial.print("e");
+        //Serial.println(res);
+        //switch (num) {
+        //case 6:
+        //if(res<100) res=100;
+        //servo6.write(res);
+        // break;
+        //case 9:
+        //servo9.write(res);
+        //break;
+        //case 0:
+        //servo10.write(res);
+        // break;
+        //case 1:
+        //servo11.write(res);
+        //break;
+        //}
 
         }
         }*/
-
 public class Controller implements Initializable{
     Arduino arduino;
+
+    AngelConverter converter;
 
     @FXML
     private Slider slider6;
@@ -101,9 +134,25 @@ public class Controller implements Initializable{
     @FXML
     private Label testLabel;
 
+    @FXML
+    private TextField textField;
+
+    @FXML
+    private void sendMessage(){
+        arduino.writeData(textField.getText().getBytes());
+    }
+
+
+
     public void initialize(URL location, ResourceBundle resources) {
         arduino = new Arduino();
         arduino.initialize();
+
+
+
+
+
+
 
         lable6.textProperty().bindBidirectional(slider6.valueProperty(), new StringConverter<Number>() {
             @Override

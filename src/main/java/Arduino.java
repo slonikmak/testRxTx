@@ -4,6 +4,7 @@ import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Enumeration;
 
 /**
@@ -11,6 +12,10 @@ import java.util.Enumeration;
  */
 public class Arduino implements SerialPortEventListener {
     SerialPort serialPort;
+
+    int byteCount = 0;
+    StringBuilder builder = new StringBuilder();
+
     /**
      * The port we're normally going to use.
      */
@@ -100,10 +105,20 @@ public class Arduino implements SerialPortEventListener {
 
 
     public synchronized void serialEvent(SerialPortEvent oEvent) {
+
         if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             try {
+                builder.append(reader.readLine());
+                builder.append(" ");
+                byteCount++;
+                if (byteCount==3) {
+                    byteCount =0;
+                    System.out.println("Out "+builder.toString());
+                    builder = new StringBuilder();
+                }
                 //int myByte=input.read();
-                System.out.println(input.read());
+                //System.out.println("Out "+(char)input.read());
+                //System.out.println("Out"+reader.readLine());
                 /*int value = myByte & 0xff;//byte to int conversion:0...127,-127...0 -> 0...255
                 if(value>=0 && value<256){//make shure everything is ok
                     System.out.println((char)myByte);
@@ -133,7 +148,11 @@ public class Arduino implements SerialPortEventListener {
     }
 
     public synchronized void writeData(byte[] data) {
-        System.out.println("Sent: " + data);
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < data.length; i++) {
+            builder.append((char) data[i]);
+        }
+        System.out.println("Sent: " + builder.toString());
         try {
             output.write(data);
         } catch (Exception e) {
