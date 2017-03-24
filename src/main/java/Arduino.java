@@ -48,6 +48,7 @@ public class Arduino implements SerialPortEventListener {
         // iterate through, looking for the port
         while (portEnum.hasMoreElements()) {
             CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
+            System.out.println(currPortId.getName());
             for (String portName : PORT_NAMES) {
                 if (currPortId.getName().equals(portName)) {
                     portId = currPortId;

@@ -11,10 +11,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("sample.fxml"));
+        loader.setLocation(getClass().getResource("main.fxml"));
         Parent root = loader.load();
 
-        Scene scene = new Scene(root, 500, 300);
+        Scene scene = new Scene(root, 1000, 1000);
 
         primaryStage.setScene(scene);
         primaryStage.show();
