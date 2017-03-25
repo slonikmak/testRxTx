@@ -22,7 +22,7 @@ public class Arduino implements SerialPortEventListener {
     private static final String PORT_NAMES[] = {
             "/dev/tty.usbserial-A9007UX1", // Mac OS X
             "/dev/ttyUSB0", // Linux
-            "COM5", // Windows
+            "COM4", // Windows
     };
 
     /**
@@ -131,7 +131,7 @@ public class Arduino implements SerialPortEventListener {
     }
 
     public synchronized void writeData(int data) {
-        System.out.println("Sent: " + data);
+        //System.out.println("Sent: " + data);
         try {
             output.write(data);
         } catch (Exception e) {
@@ -139,7 +139,7 @@ public class Arduino implements SerialPortEventListener {
         }
     }
     public synchronized void writeData(byte data) {
-        System.out.println("Sent: " + data);
+        //System.out.println("Sent: " + data);
         try {
             output.write(data);
         } catch (Exception e) {
@@ -152,7 +152,7 @@ public class Arduino implements SerialPortEventListener {
         for (int i = 0; i < data.length; i++) {
             builder.append((char) data[i]);
         }
-        System.out.println("Sent: " + builder.toString());
+        //System.out.println("Sent: " + builder.toString());
         try {
             output.write(data);
         } catch (Exception e) {

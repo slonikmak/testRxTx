@@ -76,6 +76,9 @@ public class AngelConverter {
         return result;
     }
 
+    public void setDeltaX(double deltaX) {
+        this.deltaX = this.deltaX+deltaX;
+    }
 
     public double getAngelAproperty() {
         return angelAproperty.get();

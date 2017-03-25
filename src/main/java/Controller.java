@@ -99,7 +99,7 @@ import java.util.ResourceBundle;
 
         }
         }*/
-public class Controller implements Initializable{
+public class Controller {
     Arduino arduino;
 
     AngelConverter converter;
@@ -142,17 +142,15 @@ public class Controller implements Initializable{
         arduino.writeData(textField.getText().getBytes());
     }
 
-
-
-    public void initialize(URL location, ResourceBundle resources) {
-        arduino = new Arduino();
-        arduino.initialize();
-
-
+    public void setArduino(Arduino arduino){
+        this.arduino = arduino;
+        //arduino.initialize();
+    }
 
 
 
-
+    public void init() {
+        //arduino = new Arduino();
 
         lable6.textProperty().bindBidirectional(slider6.valueProperty(), new StringConverter<Number>() {
             @Override
